@@ -2,32 +2,15 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
+const cors = require("cors");
 const dotenv = require("dotenv");
 const userRoutes = require("./routes/User");
-const courseRoutes = require('./routes/Courses')
+const courseRoutes = require("./routes/Courses");
 const { cloudinaryConnect } = require("./config/cloudinary");
 const fileUpload = require("express-fileupload");
-const swaggerJSDoc = require('swagger-jsdoc')
-const swaggerUi = require('swagger-ui-express')
 
 app.use(express.json());
 app.use(cors());
-
-const options = {
-  definition:{
-    openapi:'3.0.0',
-    info:{
-      title:"Node js Api project for mongodb",
-      version:'1.0.0'
-    },
-    servers:[
-      {
-        api:'http://localhost:4000/'
-      }
-    ]
-  }
-  // apis:[./]
-}
 
 app.use(
   fileUpload({
@@ -51,10 +34,7 @@ app.get("/", (req, res) => {
 });
 
 mongoose
-  .connect(process.env.DATABASE_URL, {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true,
-  })
+  .connect(process.env.DATABASE_URL, {})
   .then(() =>
     app.listen(PORT, () => console.log(`Server is running on Port: ${PORT}`))
   )

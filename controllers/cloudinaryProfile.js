@@ -36,7 +36,7 @@ exports.cloudinaryProfile = async (req, res) => {
       });
     }
 
-    //file formatted supported so upload to cloudinary
+    // file formatted supported so upload to cloudinary
     const response = await uploadFileToCloudinary(file, "Assign"); //Assign is folder name which we have named in cloudinary.com
     console.log(response);
 

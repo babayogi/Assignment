@@ -129,15 +129,6 @@ exports.deleteCourse = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // // Unenroll students from the course
-    
-    // const studentsEnrolled = course.studentsEnroled;
-    // for (const studentId of studentsEnrolled) {
-    //   await User.findByIdAndUpdate(studentId, {
-    //     $pull: { courses: courseId },
-    //   });
-    // }
-
     // Delete the course
     await Course.findByIdAndDelete(
       courseId,
@@ -171,8 +162,7 @@ try{
   // Pagination parameters
   const page = parseInt(req.query.page) ?? 1;
   const limit = parseInt(req.query.limit) ?? 10;
-  // const startIndex = (page - 1) * limit;
-  // const endIndex = page * limit;
+ 
 
   // Filtering options
   const category = req.query.category;
@@ -190,26 +180,6 @@ try{
     .limit(limit)
     .skip(limit * page)
     .lean();
-
-
-
-  // Pagination results
-  // const results = {};
-  // if (endIndex < filteredCourses.length) {
-  //   results.next = {
-  //     page: page + 1,
-  //     limit: limit,
-  //   };
-  // }
-  // if (startIndex > 0) {
-  //   results.previous = {
-  //     page: page - 1,
-  //     limit: limit,
-  //   };
-  // }
-  // results.totalCount = filteredCourses.length;
-  // results.courses = filteredCourses.slice(startIndex, endIndex);
-
 
   return res.status(200).json({
     success: true,

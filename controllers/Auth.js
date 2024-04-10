@@ -1,6 +1,4 @@
 const User = require("../model/User");
-// const OTP = require("../models/OTP");
-// const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -8,7 +6,7 @@ require("dotenv").config();
 // signup
 exports.signUp = async (req, res) => {
   try {
-    // data fetch from req ki body
+    // data fetch from req body
     const {
       firstName,
       lastName,
@@ -18,7 +16,7 @@ exports.signUp = async (req, res) => {
       accountType,
     } = req.body;
 
-    // validate krlo
+    // validation
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return res.status(403).json({
         success: false,
@@ -26,7 +24,7 @@ exports.signUp = async (req, res) => {
       });
     }
 
-    // 2password match krlo(password,confirm)
+    // both password should match
     if (password !== confirmPassword) {
       return res.status(400).json({
         success: false,
@@ -34,7 +32,7 @@ exports.signUp = async (req, res) => {
       });
     }
 
-    // check user already exist or not
+    // check if user already exist or not
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -42,34 +40,11 @@ exports.signUp = async (req, res) => {
         message: "User is already registered",
       });
     }
-    /*
-    // find most recent OTP stored for the user
-    const recentOtp = await OTP.find({ email })
-      .sort({ createdAt: -1 })
-      .limit(1);
-    // .sort({createdAt:-1}) -> This sorts the documents from the most recent to the oldest
-    // .limit(1): This limits the number of documents returned to just one.
-    console.log("recent otp", recentOtp);
-    // validate OTP
-    if (recentOtp.length == 0) {
-      // otp not found
-      return res.status(400).json({
-        success: false,
-        message: "otp not found",
-      });
-    } else if (otp !== recentOtp[0].otp) {
-      // invalid otp
-      return res.status(400).json({
-        success: false,
-        message: "Invalid OTP or OTP not matching",
-      });
-    }
-*/
+    
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // entry create in db
-
     const user = await User.create({
       firstName,
       lastName,
@@ -79,7 +54,7 @@ exports.signUp = async (req, res) => {
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
     });
 
-    // return res
+    // return response
     return res.status(200).json({
       success: true,
       message: "User is registered successfully",
@@ -130,12 +105,11 @@ exports.login = async (req, res) => {
         expiresIn: "2h",
       });
 
-      //   user = user.toObject();
       user.token = token;
-      user.password = undefined; // this is to do such that hacker cant hack it
+      user.password = undefined; 
       console.log(user);
 
-    
+    // return response
       res.status(200).json({
         success: true,
         token,

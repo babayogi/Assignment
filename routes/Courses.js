@@ -9,7 +9,6 @@ const {
   deleteCourse,
   getCourse,
   enrollCourse,
-  viewCourse,
 } = require("../controllers/Course");
 
 const { auth, isAdmin } = require("../middlewares/auth");
@@ -33,9 +32,6 @@ router.get("/courses/getCourse", getCourse);
 
 // course enroll by User
 router.post("/courses/enrollCourse", enrollCourse);
-
-// view the course by user
-// router.get("/viewCourse", viewCourse);
 
 // Profile picture by cloudinary
 router.post("/courses/imageUpload", cloudinaryProfile);

@@ -7,13 +7,8 @@ dotenv.config();
 // This function is used as middleware to authenticate user requests
 exports.auth = async (req, res, next) => {
   try {
-    // Extracting JWT from request cookies, body or header
-
-    const token =
-    //   req.cookies.token ||
-    //   req.body.token ||
-      req.header("Authorization").replace("Bearer ", "");
-
+    // Extracting JWT from request header
+    const token =req.header("Authorization").replace("Bearer ", "");
 
     // If JWT is missing, return 401 Unauthorized response
     if (!token) {
@@ -28,15 +23,17 @@ exports.auth = async (req, res, next) => {
       req.user = decode;
     } catch (error) {
       // If JWT verification fails, return 401 Unauthorized response
-      return res
-        .status(401)
-        .json({ success: false, message: "token is invalid" });
+      return res.status(401).json({ 
+        success: false, 
+        message: "token is invalid" 
+      });
     }
 
     // If JWT is valid, move on to the next middleware or request handler
     next();
   } catch (error) {
     console.log(error);
+    
     // If there is an error during the authentication process, return 401 Unauthorized response
     return res.status(401).json({
       success: false,

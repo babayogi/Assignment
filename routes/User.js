@@ -4,7 +4,6 @@ const router = express.Router();
 const {
   signUp,
   login,
-  // changePassword,
 } = require("../controllers/Auth");
 
 const { getProfile } = require("../controllers/Profile");
